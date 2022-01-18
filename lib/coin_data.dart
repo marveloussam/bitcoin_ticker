@@ -32,18 +32,23 @@ const List<String> cryptoList = [
   'LTC',
 ];
 
-const coinAPIURL = 'https://rest.coinapi.io/v1/exchangerate';
-const apiKey = 'YOUR-API-KEY-HERE';
+const coinAPIURL = 'https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC';
+const apiKey = 'ZDJiOTY0YWExYzg1NDFlMWFjYTkyZjk2NTU4MmYwOTQ';
 
 class CoinData {
   //TODO 3: Update getCoinData to take the selectedCurrency as an input.
-  Future getCoinData() async {
+  Future getCoinData(selectedCurrency) async {
     //TODO 4: Update the URL to use the selectedCurrency input.
-    String requestURL = '$coinAPIURL/BTC/USD?apikey=$apiKey';
-    http.Response response = await http.get(requestURL);
+   // String requestURL = '$coinAPIURL/BTC/USD?apikey=$apiKey';
+  	
+    String myURL = '$coinAPIURL$selectedCurrency';
+ 
+
+
+    http.Response response = await http.get(Uri.parse(myURL), headers: {'x-ba-key': apiKey});
     if (response.statusCode == 200) {
       var decodedData = jsonDecode(response.body);
-      var lastPrice = decodedData['rate'];
+      var lastPrice = decodedData['last'];
       return lastPrice;
     } else {
       print(response.statusCode);
